@@ -28,7 +28,7 @@ class Directory:
 
     def showContents(self, key):
         f = Fernet(key)
-        cprint('Current folder: ' + self.getPath(), 'yellow')
+        cprint('Current path: ' + self.getPath(), 'yellow')
         if(len(self.psswrds) == 0 and len(self.children) == 0):
             cprint('No contents', 'green')
             return
