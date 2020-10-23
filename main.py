@@ -32,7 +32,7 @@ except:
 
 master = input('Enter master password or type \'forgot\'\n')
 if(master == 'forgot'):
-	print(mgr.getHint())
+	print('Hint', mgr.getHint())
 
 elif(mgr.authenticate(master)):
 	mgr.navigateDirectories(master)

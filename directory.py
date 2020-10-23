@@ -21,7 +21,7 @@ class Directory:
         curr = self
         res = ''
         while(not curr.parent == None):
-            res = '-' + curr.name + res
+            res = '->' + curr.name + res
             curr = curr.parent
         res = curr.name + res
         return res
@@ -43,6 +43,16 @@ class Directory:
         for child in self.children:
             print(child.name)
     
+    def changePassword(self, key, newkey):
+        f = Fernet(key)
+        newf = Fernet(newkey)
+        for idx in range(1, len(self.psswrds), 2):
+            psswrd = f.decrypt(self.psswrds[idx]).decode()
+            self.psswrds[idx] = newf.encrypt(psswrd.encode())
+    
+        for child in self.children:
+            child.changePassword(key, newkey)
+
     def getParent(self):
         return self.parent
 
