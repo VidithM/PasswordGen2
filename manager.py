@@ -1,5 +1,9 @@
-import hashlib
+import bcrypt
+import binascii
 from directory import Directory
+
+KEY_SALT = b'$2b$12$lcdN2IDctYTDHGul72f7Bu'
+AUTH_SALT = b'$2b$12$0kA/pIrJH1DcsszMD6A4eu'
 
 class Manager():
     def __init__(self):
@@ -7,7 +11,7 @@ class Manager():
     
     def navigateDirectories(self, psswrd):
         curr = self.root
-        key = (hashlib.sha256(psswrd.encode()).hexdigest()[0:43] + '=').encode()
+        key = (binascii.hexlify(bcrypt.hashpw(psswrd.encode(), KEY_SALT)).decode()[0:43] + '=').encode()
         verbose = True
         while(True):
             if(verbose):
@@ -51,10 +55,10 @@ class Manager():
                 while(not head.parent == None):
                     head = head.parent
             
-                newkey = (hashlib.sha256(newpass.encode()).hexdigest()[0:43] + '=').encode()
+                newkey = (binascii.hexlify(bcrypt.hashpw(newpass.encode(), KEY_SALT)).decode()[0:43] + '=').encode()
                 head.changePassword(key, newkey)
                 self.hint = newhint
-                self.hash = hashlib.sha256((newpass + self.salt).encode()).hexdigest()
+                self.hash = bcrypt.hashpw(newpass.encode(), AUTH_SALT)
                 key = newkey
                 print('Password change successful')
             elif(op == '3'):
@@ -76,13 +80,12 @@ class Manager():
     def resetPassword(self, newpass):
         pass
 
-    def setConfig(self, salt, hash, hint):
-        self.hash = hash 
-        self.salt = salt
-        self.hint = hint 
+    def setConfig(self, psswrd, hint):
+        self.hash = bcrypt.hashpw(psswrd.encode(), AUTH_SALT)
+        self.hint = hint
 
     def authenticate(self, psswrd):
-        return (hashlib.sha256((psswrd + self.salt).encode()).hexdigest() == self.hash)
+        return bcrypt.checkpw(psswrd.encode(), self.hash)
 
     def getHint(self):
         return self.hint

@@ -1,6 +1,5 @@
 import os, pickle
 from manager import Manager
-import hashlib
 
 
 mgr = None
@@ -19,11 +18,8 @@ except:
 	print('Enter new hint')
 	newhint = input()
 
-	salt = 'abcde'
-	hash = hashlib.sha256((newpass + salt).encode()).hexdigest()
-
 	mgr = Manager()
-	mgr.setConfig(salt, hash, newhint)
+	mgr.setConfig(newpass, newhint)
 	storage = open('contents.bin', 'wb')
 	storage.write(pickle.dumps(mgr))
 	storage.close()

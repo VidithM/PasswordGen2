@@ -38,7 +38,7 @@ class Directory:
                 cprint(self.psswrds[idx], 'cyan')
             else:
                 print(f.decrypt(self.psswrds[idx]).decode())
-        
+
         cprint('Subfolders:', 'green')
         for child in self.children:
             print(child.name)
