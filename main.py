@@ -1,4 +1,6 @@
-import os, pickle
+import os
+import pickle
+import getpass
 from manager import Manager
 
 
@@ -26,7 +28,7 @@ except:
 	print('Restart to use')
 	quit()
 
-master = input('Enter master password or type \'forgot\'\n')
+master = getpass.getpass('Enter master password or type \'forgot\'\n')
 if(master == 'forgot'):
 	print('Hint', mgr.getHint())
 
